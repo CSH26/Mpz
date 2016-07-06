@@ -7,6 +7,7 @@ public class MusicItem {
     private boolean mSelectable;
     private Drawable mIcon;
     private String[] mItem;
+    private long id;
 
     public MusicItem(Drawable icon, String[] mInfo){
         mIcon = icon;
@@ -38,15 +39,17 @@ public class MusicItem {
         mItem[2] = musicAlbumTitle;
     }
 
-    public MusicItem(String musicTitle, String musicAlbumTitle, String musicArtist){
+    public MusicItem(long id, String musicTitle, String musicAlbumTitle, String musicArtist){
         mItem = new String[3];
+        this.id = id;
         mItem[0] = musicTitle;
         mItem[1] = musicAlbumTitle;
         mItem[2] = musicArtist;
     }
 
-    public MusicItem(String[] musicItem){
+    public MusicItem(long id, String[] musicItem){
         mItem = new String[3];
+        this.id = id;
         mItem[0] = musicItem[0];
         mItem[1] = musicItem[1];
         mItem[2] = musicItem[2];
@@ -82,5 +85,9 @@ public class MusicItem {
 
     public Drawable getIcon(){
         return mIcon;
+    }
+
+    public long getId(){
+        return id;
     }
 }

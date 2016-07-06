@@ -2,6 +2,7 @@ package com.example.tj.mpz.Music;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
@@ -17,9 +18,8 @@ import java.util.List;
 public class MusicListAdapter extends BaseAdapter {
     public static final String TAG = "MusicListAdapter";
     private Context context;
-    private List<MusicItem> mItems = new ArrayList<MusicItem>();
+    public List<MusicItem> mItems = new ArrayList<MusicItem>();
     private Cursor cursor;
-
 
     public MusicListAdapter(Context context) {
         this.context = context;
@@ -44,26 +44,20 @@ public class MusicListAdapter extends BaseAdapter {
         String title;
         String artist = "복면가왕";
         String albumTitle = "여름";
+        long musicId;
 
         cursor.moveToFirst();
         title = cursor.getString(8);  // 타이틀
-        mItems.add(new MusicItem(title,albumTitle,artist));
+        musicId = Long.parseLong(cursor.getString(0));
+        mItems.add(new MusicItem(musicId, title,albumTitle,artist));
 
             while (cursor.moveToNext()) {
                 mData = new String[3];
                 mData[0] = cursor.getString(8);  // 타이틀
                 mData[1] = albumTitle; // 앨범
                 mData[2] = artist; // 아티스트
-                mItems.add(new MusicItem(mData));
+                mItems.add(new MusicItem(Long.parseLong(cursor.getString(0)), mData));
             }
-
-    }
-
-    public void itemCheck(){
-
-        for(int i = 0; i<mItems.size();i++){
-            Log.d(TAG,"타이틀은 "+mItems.get(i).getData(0)+ "가수는 "+mItems.get(i).getData(1) + "앨범명은 "+mItems.get(i).getData(2));
-        }
 
     }
 
@@ -79,7 +73,7 @@ public class MusicListAdapter extends BaseAdapter {
 
     @Override
     public long getItemId(int i) {
-        return 0;
+        return mItems.get(i).getId();
     }
 
     public void addItem(MusicItem musicItem){
@@ -101,8 +95,12 @@ public class MusicListAdapter extends BaseAdapter {
         playListView.setText(0, mItems.get(position).getData(0));
         playListView.setText(1,mItems.get(position).getData(1));
         playListView.setText(2,mItems.get(position).getData(2));
+
+
         return playListView;
     }
+
+
 
     /*
 07-05 16:43:10.884 27187-27187/com.example.tj.mpz D/MusicListAdapter: 칼럼 인덱스 getString(0)_id

@@ -3,6 +3,7 @@ package com.example.tj.mpz.Music;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.tj.mpz.R;
 import com.example.tj.mpz.SplashActivity;
@@ -47,6 +49,8 @@ public class MusicListActivity extends AppCompatActivity {
 
         musicList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.d(TAG,"선택된 아이디"+musicListAdapter.getItemId(position));
+
                     setPosition(position);
             }
         });
@@ -56,9 +60,11 @@ public class MusicListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(forwordPosition != -1) {
                     Intent musicIntent = new Intent(getApplicationContext(), MusicDataActivity.class);
-                    //musicListAdapter.getItem(getForwordPosition());
-                    musicIntent.putExtra("LIST_POSITION",getForwordPosition());
+                    musicIntent.putExtra("MUSIC_ID",musicListAdapter.getItemId(getForwordPosition()));
                     startActivity(musicIntent);
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"음악을 선택해 주세요.",Toast.LENGTH_SHORT).show();
                 }
             }
         });

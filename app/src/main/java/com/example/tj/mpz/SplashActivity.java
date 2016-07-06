@@ -12,13 +12,12 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Handler handler = new Handler(){
-            @Override
-            public void handleMessage(Message msg) {
-                finish();
-            }
-        };
+        try{
+            Thread.sleep(2000);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-        handler.sendEmptyMessageDelayed(0,5000);
+        finish();
     }
 }
