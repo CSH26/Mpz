@@ -21,7 +21,7 @@ import com.example.tj.mpz.R;
 import java.io.File;
 import java.io.IOException;
 
-public class MusicDataActivity extends AppCompatActivity implements View.OnClickListener, Runnable{
+public class MusicDataActivity extends AppCompatActivity implements View.OnClickListener, Runnable, MediaPlayer.OnCompletionListener{
     private final String TAG = "MusicDataActivity";
     MediaPlayer mediaPlayer;
     SeekBar volumeSeek, durationSeek;
@@ -43,6 +43,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         setContentView(R.layout.activity_music_data);
 
         mediaPlayer = new MediaPlayer();
+        mediaPlayer.setOnCompletionListener(this);
         contentResolver = getContentResolver();
 
         mr_FastForwordButton = (ImageView)findViewById(R.id.mr_fast_forword_button);
@@ -94,6 +95,8 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
             mediaPlayer.setDataSource(audiofilepath);
             mediaPlayer.prepare();
             durationSeek.setMax(mediaPlayer.getDuration());
+            DurationCalc durationCalc = new DurationCalc(mediaPlayer.getDuration());
+            Log.d(TAG,"초로 변환한 단위는 "+durationCalc.excute());
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -112,7 +115,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
                 setVolume(progress);
                 volumeInfo.setText(Integer.toString(progress));
             }else {
-                Log.d(TAG,"듀레이션시크바가 이동하였습니다.");
+
             }
         }
 
@@ -127,6 +130,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
             if(seekBar.getContentDescription().equals("V")){
                 setVolume(seekBar.getProgress());
             }else {
+                mediaPlayer.seekTo(seekBar.getProgress());
                 Log.d(TAG,"듀레이션 시크바가 멈출때의 값은 "+seekBar.getProgress());
             }
         }
@@ -207,5 +211,12 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        playImage.setImageResource(R.drawable.play_button);
+        mediaPlayer.seekTo(0);
+        durationSeek.setProgress(0);
     }
 }
