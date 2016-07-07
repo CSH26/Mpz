@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         // 로딩화면 론칭
         //startActivity(new Intent(this,SplashActivity.class));
         // 리스트화면 론칭
-        startActivity(new Intent(this,MusicListActivity.class));
+        //startActivity(new Intent(this,MusicListActivity.class));
         /*
         slidingLayout = (LinearLayout)findViewById(R.id.slidingLayout);
         listSelectedAnim = AnimationUtils.loadAnimation(this,R.anim.translate_selected_list);

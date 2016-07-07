@@ -4,6 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/layout_back"
+    android:id="@+id/splashLayout"
+
+
     tools:context="com.example.tj.mpz.SplashActivity">
+
+
+    <ImageView
+       android:layout_marginTop="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:src="@drawable/logo_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/logoText" />
+
+
+    <ImageView
+        android:layout_below="@id/logoText"
+        android:src="@drawable/mpz_logo"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:id="@+id/logo"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="70dp"
+         />
+
+    <ProgressBar android:id="@+id/ProgressBar"
+        android:layout_below="@id/logo"
+
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_centerInParent="true"
+        android:progress="100"
+        android:layout_marginTop="100dp" />
+
 
 </RelativeLayout>

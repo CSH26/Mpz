@@ -49,8 +49,6 @@ public class MusicListActivity extends AppCompatActivity {
 
         musicList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Log.d(TAG,"선택된 아이디"+musicListAdapter.getItemId(position));
-
                     setPosition(position);
             }
         });
@@ -60,7 +58,7 @@ public class MusicListActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(forwordPosition != -1) {
                     Intent musicIntent = new Intent(getApplicationContext(), MusicDataActivity.class);
-                    musicIntent.putExtra("MUSIC_ID",musicListAdapter.getItemId(getForwordPosition()));
+                    musicIntent.putExtra("MUSIC_POSITION",musicListAdapter.getItemId(getForwordPosition()));
                     startActivity(musicIntent);
                 }
                 else{

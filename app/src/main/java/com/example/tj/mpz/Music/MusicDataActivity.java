@@ -1,8 +1,12 @@
 package com.example.tj.mpz.Music;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,20 +18,37 @@ import android.widget.TextView;
 
 import com.example.tj.mpz.R;
 
-public class MusicDataActivity extends AppCompatActivity {
+import java.io.File;
+import java.io.IOException;
+
+public class MusicDataActivity extends AppCompatActivity implements View.OnClickListener, Runnable{
     private final String TAG = "MusicDataActivity";
-    SeekBar volumeSeek;
-    SeekBar durationSeek;
+    MediaPlayer mediaPlayer;
+    SeekBar volumeSeek, durationSeek;
     TextView volumeInfo;
     AudioManager audioManager;
-    ImageView volumeImage;
+    ImageView volumeImage, playImage, mr_RewindButton, mr_FastForwordButton, mr_StopButton;
+
     boolean isQuite = false;
     int pastVolume = 0;
+
+    String selection;
+    String audiofilepath = "Not Found File Path";
+    ContentResolver contentResolver;
+    Cursor cursor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_data);
 
+        mediaPlayer = new MediaPlayer();
+        contentResolver = getContentResolver();
+
+        mr_FastForwordButton = (ImageView)findViewById(R.id.mr_fast_forword_button);
+        mr_RewindButton = (ImageView)findViewById(R.id.mr_rewind_button);
+        mr_StopButton = (ImageView)findViewById(R.id.mr_stop_button);
+        playImage = (ImageView)findViewById(R.id.playImage);
         volumeImage = (ImageView)findViewById(R.id.volumeImage);
         audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         volumeInfo = (TextView)findViewById(R.id.volumeInfo);
@@ -45,14 +66,44 @@ public class MusicDataActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         Bundle musicBundle = intent.getExtras();
-        int musicPosition = musicBundle.getInt("MUSIC_ID");
+        long musicPosition = musicBundle.getLong("MUSIC_POSITION");
+        selection = MediaStore.Audio.Media._ID+" = \'"+Long.toString(musicPosition)+"\'";
+        cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, selection, null, null);
+        initFileSetting();
+        setListener();
+        try{
+            new Thread(MusicDataActivity.this).start();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
+    public void setListener(){
+        playImage.setOnClickListener(this);
+        mr_FastForwordButton.setOnClickListener(this);
+        mr_RewindButton.setOnClickListener(this);
+        mr_StopButton.setOnClickListener(this);
+    }
+
+    public void initFileSetting(){
+        cursor.moveToFirst();
+        int fileColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
+        audiofilepath = cursor.getString(fileColumn);
+        durationSeek.setProgress(0);
+        try{
+            mediaPlayer.setDataSource(audiofilepath);
+            mediaPlayer.prepare();
+            durationSeek.setMax(mediaPlayer.getDuration());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void initVolumeSeekBar(){
         volumeInfo.setText(Integer.toString(getVolume()));
         volumeSeek.setProgress(getVolume());
     }
+
     private class SeekBarOnChangeListener implements SeekBar.OnSeekBarChangeListener{
 
         @Override
@@ -76,7 +127,7 @@ public class MusicDataActivity extends AppCompatActivity {
             if(seekBar.getContentDescription().equals("V")){
                 setVolume(seekBar.getProgress());
             }else {
-                Log.d(TAG,"듀레이션시크바가 이동하였습니다.");
+                Log.d(TAG,"듀레이션 시크바가 멈출때의 값은 "+seekBar.getProgress());
             }
         }
     }
@@ -101,6 +152,60 @@ public class MusicDataActivity extends AppCompatActivity {
             volumeSeek.setProgress(0);
             setVolume(0);
             isQuite = true;
+        }
+    }
+
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.playImage:
+                if(mediaPlayer.isPlaying()){
+                    playImage.setImageResource(R.drawable.play_button);
+                    mediaPlayer.pause();
+                }else {
+                    playImage.setImageResource(R.drawable.pause_button);
+                    mediaPlayer.start();
+                }
+                break;
+            case R.id.mr_rewind_button:
+                mediaPlayer.seekTo(0);
+                durationSeek.setProgress(0);
+                mediaPlayer.start();
+                break;
+            case R.id.mr_fast_forword_button:
+                int duration = mediaPlayer.getDuration();
+                int current = mediaPlayer.getCurrentPosition();
+                if(duration-current < 10000){
+                   mediaPlayer.seekTo(duration);
+                }else {
+                   mediaPlayer.seekTo(current+10000);
+                }
+                break;
+            case R.id.mr_stop_button:
+                try{
+                    playImage.setImageResource(R.drawable.play_button);
+                    mediaPlayer.stop();
+                    mediaPlayer.prepare();
+                    mediaPlayer.seekTo(0);
+                    durationSeek.setProgress(0);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                break;
+        }
+    }
+
+    public void run() {
+        int current = 0;
+        while (mediaPlayer != null){
+            try{
+                Thread.sleep(1000);
+                current = mediaPlayer.getCurrentPosition();
+                if(mediaPlayer.isPlaying()){
+                    durationSeek.setProgress(current);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 }

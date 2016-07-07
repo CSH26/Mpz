@@ -57,12 +57,53 @@
             android:layout_height="wrap_content"
             android:id="@+id/at_a_time_Button" />
 
-        <SeekBar
-
-            android:layout_marginTop="90dp"
+        <LinearLayout
+            android:id="@+id/durationLayout"
+            android:layout_marginTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/durationSeek" />
+            android:orientation="horizontal">
+            <ImageView
+                android:src="@drawable/play_button"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:id="@+id/playImage" />
+
+            <SeekBar
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/durationSeek" />
+        </LinearLayout>
+
+        <LinearLayout
+
+            android:id="@+id/media_button_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/rewind_button"
+                android:id="@+id/mr_rewind_button" />
+
+            <ImageView
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/forword_button"
+                android:id="@+id/mr_fast_forword_button" />
+
+            <ImageView
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/stop_button"
+                android:id="@+id/mr_stop_button" />
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -121,7 +162,6 @@
             android:id="@+id/pause" />
 
         <Button
-
             android:layout_margin="10dp"
             android:background="@drawable/selector_button_click"
             android:layout_width="wrap_content"
