@@ -73,36 +73,57 @@
                 android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:thumb="@drawable/duration_seek"
                 android:id="@+id/durationSeek" />
+
         </LinearLayout>
 
         <LinearLayout
-
+            android:gravity="center"
             android:id="@+id/media_button_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_margin="10dp"
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/colorWhite"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:id="@+id/startDurationText" />
+
+            <ImageView
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/rewind_button"
                 android:id="@+id/mr_rewind_button" />
 
             <ImageView
-                android:layout_margin="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
                 android:src="@drawable/forword_button"
                 android:id="@+id/mr_fast_forword_button" />
 
             <ImageView
-                android:layout_margin="10dp"
-                android:layout_width="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="5dp"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/stop_button"
                 android:id="@+id/mr_stop_button" />
+
+            <TextView
+                android:layout_marginRight="5dp"
+                android:textColor="@color/colorWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:id="@+id/endDurationText" />
         </LinearLayout>
 
     </LinearLayout>
@@ -136,7 +157,6 @@
     </LinearLayout>
 
     <LinearLayout
-
         android:gravity="center"
         android:layout_below="@id/volumeControlLayout"
         android:id="@+id/footerLayout"
@@ -147,26 +167,33 @@
         <Button
             android:layout_margin="10dp"
             android:background="@drawable/selector_button_click"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:text="Start"
-            android:id="@+id/start" />
-
-        <Button
-
-            android:layout_margin="10dp"
-            android:background="@drawable/selector_button_click"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pause"
-            android:id="@+id/pause" />
+            android:text="Record"
+            android:id="@+id/record_start" />
 
         <Button
             android:layout_margin="10dp"
             android:background="@drawable/selector_button_click"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:text="End"
-            android:id="@+id/end" />
+            android:text="Stop"
+            android:id="@+id/record_stop" />
+
+        <Button
+            android:layout_margin="10dp"
+            android:background="@drawable/selector_button_click"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Play"
+            android:id="@+id/record_play" />
+
+        <Button
+            android:layout_margin="10dp"
+            android:background="@drawable/selector_button_click"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:id="@+id/record_save" />
     </LinearLayout>
 </RelativeLayout>
