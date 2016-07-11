@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/dialogLayout"
+    android:layout_marginLeft="20dp">
+
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="파일 경로"
+            android:textSize="10dp"
+            android:id="@+id/exDirectoryTitle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/sdcard/0"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="20dp"
+            android:id="@+id/exDirectory" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MrTitle"
+            android:textSize="10dp"
+            android:id="@+id/mrTitle" />
+
+        <TextView
+            android:textSize="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="New Text"
+            android:id="@+id/mrInfo" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="File Name"
+            android:id="@+id/fileNameTitle" />
+
+        <EditText
+            android:textColor="@color/colorAccent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="File Name !!!"
+            android:id="@+id/fileName" />
+
+    </LinearLayout>
+
+</LinearLayout>

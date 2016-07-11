@@ -15,60 +15,53 @@ import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tj.mpz.R;
 
-public class MusicDataActivity extends AppCompatActivity implements View.OnClickListener, Runnable, MediaPlayer.OnCompletionListener{
+public class RecordCheckActivity extends AppCompatActivity implements View.OnClickListener, Runnable, MediaPlayer.OnCompletionListener {
 
-    private final String TAG = "MusicDataActivity";
-    DialogView dialogView;
+    private final String TAG = "RecordCheckActivity";
     MediaPlayer mediaPlayer;
-    MediaRecorder mediaRecorder; //녹음 부
+
+    AlertDialogClickListener alertDialogClickListener;
+    AlertDialog.Builder aBuilder;
+    DialogView dialogView;
     SeekBar volumeSeek, durationSeek;
     TextView volumeInfo, startDurationText, endDurationText;
     AudioManager audioManager;
-    ImageButton at_a_time_Button;
     ImageView volumeImage, playImage, mr_RewindButton, mr_FastForwordButton, mr_StopButton;
-    Button record_start, record_stop, record_save, record_play;
+    ImageButton saveButton;
     boolean isQuite = false;
     int pastVolume = 0, maxSecond, runSecond = 0, runMinute = 0;
-    boolean isRecording = false, checkBeforeSave = false;
-    String selection, second, minute;
-    String audiofilepath = "Not Found File Path", savedFilePath, baseFilePath, musicFormat;
-    ContentResolver contentResolver;
-    Cursor cursor;
-    Context context;
+
+    String second, minute;
+    String audiofilepath = "Not Found File Path", savedFilePath;
+
     DurationCalc durationCalc;
     Handler handler;
-    AlertDialogClickListener alertDialogClickListener;
-    AlertDialog.Builder aBuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_music_data);
+        setContentView(R.layout.activity_record_check);
 
-        aBuilder = new AlertDialog.Builder(MusicDataActivity.this);
         alertDialogClickListener = new AlertDialogClickListener();
-        dialogView = new DialogView(this);
+        aBuilder = new AlertDialog.Builder(this);
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(this);
-        contentResolver = getContentResolver();
+
+        saveButton = (ImageButton)findViewById(R.id.saveButton);
+        dialogView = new DialogView(this);
         savedFilePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/myRecord.3gp";
-        baseFilePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/";
-        musicFormat = ".3gp";
-        at_a_time_Button = (ImageButton)findViewById(R.id.at_a_time_Button);
         mr_FastForwordButton = (ImageView)findViewById(R.id.mr_fast_forword_button);
         mr_RewindButton = (ImageView)findViewById(R.id.mr_rewind_button);
         mr_StopButton = (ImageView)findViewById(R.id.mr_stop_button);
@@ -78,11 +71,6 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         volumeInfo = (TextView)findViewById(R.id.volumeInfo);
         startDurationText = (TextView)findViewById(R.id.startDurationText);
         endDurationText = (TextView)findViewById(R.id.endDurationText);
-
-        record_start = (Button)findViewById(R.id.record_start);
-        record_stop = (Button)findViewById(R.id.record_stop);
-        record_save = (Button)findViewById(R.id.record_save);
-        record_play = (Button)findViewById(R.id.record_play);
 
         SeekBarOnChangeListener seekBarOnChangeListener = new SeekBarOnChangeListener();
         volumeSeek = (SeekBar)findViewById(R.id.volumeSeek);
@@ -94,19 +82,16 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         durationSeek.setContentDescription("D");
         volumeSeek.setOnSeekBarChangeListener(seekBarOnChangeListener);
         durationSeek.setOnSeekBarChangeListener(seekBarOnChangeListener);
-
         createAlertDialog();
 
         Intent intent = getIntent();
-        Bundle musicBundle = intent.getExtras();
-        long musicPosition = musicBundle.getLong("MUSIC_POSITION");
-        selection = MediaStore.Audio.Media._ID+" = \'"+Long.toString(musicPosition)+"\'";
-        cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, selection, null, null);
-        initFileSetting();
-        initRecordButton();
+        Bundle recordBundle = intent.getExtras();
+        String record_file_path = recordBundle.getString("RECORD_FILE_PATH");
+        initFileSetting(record_file_path);
         setListener();
+
         try{
-            new Thread(MusicDataActivity.this).start();
+            new Thread(RecordCheckActivity.this).start();
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -130,29 +115,21 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         };
     }
 
-    public void initRecordButton(){
-        record_start.setEnabled(true);
-        record_stop.setEnabled(true);
-        record_play.setEnabled(false);
-        record_save.setEnabled(true);
+    public void fileSave(String FilePath){
+
     }
 
     public void setListener(){
-        at_a_time_Button.setOnClickListener(this);
-        record_play.setOnClickListener(this);
-        record_save.setOnClickListener(this);
-        record_stop.setOnClickListener(this);
-        record_start.setOnClickListener(this);
+        saveButton.setOnClickListener(this);
         playImage.setOnClickListener(this);
         mr_FastForwordButton.setOnClickListener(this);
         mr_RewindButton.setOnClickListener(this);
         mr_StopButton.setOnClickListener(this);
     }
 
-    public void initFileSetting(){
-        cursor.moveToFirst();
-        int fileColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
-        audiofilepath = cursor.getString(fileColumn);
+    public void initFileSetting(String path){
+
+        audiofilepath = path;
         durationSeek.setProgress(0);
         try{
             mediaPlayer.setDataSource(audiofilepath);
@@ -229,7 +206,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
 
     public void onClick(View view){
 
-        switch (view.getId()) {
+        switch (view.getId()){
             case R.id.playImage:
                 mrStart();
                 break;
@@ -241,49 +218,20 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
             case R.id.mr_fast_forword_button:
                 int duration = mediaPlayer.getDuration();
                 int current = mediaPlayer.getCurrentPosition();
-                if (duration - current < 10000) {
+                if(duration-current < 10000){
                     mediaPlayer.seekTo(duration);
-                } else {
-                    mediaPlayer.seekTo(current + 10000);
+                }else {
+                    mediaPlayer.seekTo(current+10000);
                 }
                 break;
             case R.id.mr_stop_button:
                 mrSetZeroPosition();
                 break;
-            case R.id.record_start:
-                recordStart();
-                break;
-            case R.id.record_stop:
-                if (isRecording) {
-                    if (mediaPlayer.isPlaying()) {
-                        mrSetZeroPosition();    // pause 기능 추가 할 것
-                    }
-                    isRecording = false;
-                    setRecordButtonEnabled(true, false, true, true);
-                    mediaRecorder.stop();
-                }
-                break;
-            case R.id.record_play:
-                Intent recordIntent = new Intent(getApplicationContext(), RecordCheckActivity.class);
-                recordIntent.putExtra("RECORD_FILE_PATH", savedFilePath);
-                startActivity(recordIntent);
-                break;
-            case R.id.record_save:
-                if (checkBeforeSave) {
-                    aBuilder.show();
-                } else {
-                    Toast.makeText(getApplicationContext(), "저장하기전에 Record를 먼저 진행하세요.", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.at_a_time_Button:
-                mrStart();
-                recordStart();
+            case R.id.saveButton:
+                aBuilder = new AlertDialog.Builder(this);
+                aBuilder.show();
                 break;
         }
-    }
-
-    public void fileSave(String FilePath){
-        mediaRecorder.setOutputFile(baseFilePath+FilePath+musicFormat);
     }
 
     public void run() {
@@ -327,23 +275,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
             mediaPlayer.start();
         }
     }
-    public void recordStart(){
-        isRecording = true;
-        checkBeforeSave = true;
-        setRecordButtonEnabled(false, true, false, false);
 
-        try {
-            mediaRecorder = new MediaRecorder();
-            mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-            mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-            mediaRecorder.setOutputFile(savedFilePath);
-            mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-            mediaRecorder.prepare();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        mediaRecorder.start();
-    }
     public void setDurationPosition(int cur){
         durationCalc.setDuration(cur);
         runSecond = durationCalc.getDurationCalc();
@@ -357,13 +289,6 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
                 break;
             }
         }
-    }
-
-    public void setRecordButtonEnabled(boolean startBtn, boolean stopBtn, boolean playBtn, boolean saveBtn){
-        record_start.setEnabled(startBtn);
-        record_stop.setEnabled(stopBtn);
-        record_play.setEnabled(playBtn);
-        record_save.setEnabled(saveBtn);
     }
 
     @Override
@@ -435,6 +360,5 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         aBuilder.setNegativeButton("취소", alertDialogClickListener);
 
     }
-
 
 }

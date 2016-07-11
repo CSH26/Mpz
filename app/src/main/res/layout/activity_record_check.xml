@@ -38,7 +38,7 @@
         android:id="@+id/mainLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="340dp">
+        android:layout_height="400dp">
 
         <TextView
             android:layout_marginLeft="10dp"
@@ -52,14 +52,14 @@
         <ImageButton
             android:layout_marginTop="60dp"
             android:layout_gravity="center"
-            android:src="@drawable/at_a_time_image"
+            android:src="@drawable/record_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/at_a_time_Button" />
+            android:id="@+id/saveButton" />
 
         <LinearLayout
             android:id="@+id/durationLayout"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="120dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -133,7 +133,7 @@
         android:id="@+id/volumeControlLayout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent">
 
         <ImageView
             android:src="@drawable/volume_control"
@@ -156,44 +156,5 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:gravity="center"
-        android:layout_below="@id/volumeControlLayout"
-        android:id="@+id/footerLayout"
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <Button
-            android:layout_margin="10dp"
-            android:background="@drawable/selector_button_click"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:text="Record"
-            android:id="@+id/record_start" />
-
-        <Button
-            android:layout_margin="10dp"
-            android:background="@drawable/selector_button_click"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:text="Stop"
-            android:id="@+id/record_stop" />
-
-        <Button
-            android:layout_margin="10dp"
-            android:background="@drawable/selector_button_click"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:text="Play"
-            android:id="@+id/record_play" />
-
-        <Button
-            android:layout_margin="10dp"
-            android:background="@drawable/selector_button_click"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:id="@+id/record_save" />
-    </LinearLayout>
 </RelativeLayout>
