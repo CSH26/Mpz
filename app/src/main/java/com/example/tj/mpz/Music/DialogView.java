@@ -2,8 +2,12 @@ package com.example.tj.mpz.Music;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tj.mpz.R;
 
@@ -13,7 +17,8 @@ import com.example.tj.mpz.R;
 public class DialogView extends LinearLayout {
 
     EditText fileName;
-    public DialogView(Context context) {
+
+    public DialogView(final Context context) {
         super(context);
 
         LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

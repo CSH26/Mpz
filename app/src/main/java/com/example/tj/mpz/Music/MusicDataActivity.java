@@ -30,6 +30,12 @@ import android.widget.Toast;
 
 import com.example.tj.mpz.R;
 
+import java.io.BufferedReader;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 public class MusicDataActivity extends AppCompatActivity implements View.OnClickListener, Runnable, MediaPlayer.OnCompletionListener{
 
     private final String TAG = "MusicDataActivity";
@@ -45,7 +51,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
     boolean isQuite = false;
     int pastVolume = 0, maxSecond, runSecond = 0, runMinute = 0;
     boolean isRecording = false, checkBeforeSave = false;
-    String selection, second, minute;
+    String selection, second, minute, fileAccess;
     String audiofilepath = "Not Found File Path", savedFilePath, baseFilePath, musicFormat;
     ContentResolver contentResolver;
     Cursor cursor;
@@ -54,10 +60,13 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
     Handler handler;
     AlertDialogClickListener alertDialogClickListener;
     AlertDialog.Builder aBuilder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_data);
+
+        fileAccess = Environment.getExternalStorageState();
 
         aBuilder = new AlertDialog.Builder(MusicDataActivity.this);
         alertDialogClickListener = new AlertDialogClickListener();
@@ -66,7 +75,6 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         mediaPlayer.setOnCompletionListener(this);
         contentResolver = getContentResolver();
         savedFilePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/myRecord.3gp";
-        baseFilePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/";
         musicFormat = ".3gp";
         at_a_time_Button = (ImageButton)findViewById(R.id.at_a_time_Button);
         mr_FastForwordButton = (ImageView)findViewById(R.id.mr_fast_forword_button);
@@ -105,6 +113,13 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         initFileSetting();
         initRecordButton();
         setListener();
+
+        if (fileAccess.equals(Environment.MEDIA_MOUNTED)) {
+            baseFilePath = Environment.getExternalStorageDirectory().getAbsolutePath();
+        } else {
+            baseFilePath = Environment.MEDIA_UNMOUNTED;
+        }
+
         try{
             new Thread(MusicDataActivity.this).start();
         }catch (Exception e){
@@ -283,7 +298,22 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void fileSave(String FilePath){
-        mediaRecorder.setOutputFile(baseFilePath+FilePath+musicFormat);
+        if(baseFilePath.equals(Environment.MEDIA_UNMOUNTED)){
+            Log.d(TAG,"SD카드에 접근 할 수 없습니다.");
+        }else {
+            FileInputStream fis;
+            BufferedReader br;
+            try {
+                fis = new FileInputStream(savedFilePath);
+                br = new BufferedReader(new InputStreamReader(fis));
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+            //mediaRecorder.setOutputFile(baseFilePath+"/"+FilePath+musicFormat);
+            Log.d(TAG,"SD카드에 접근 할 수 있습니다.");
+            Log.d(TAG,"파일 이름은 "+baseFilePath+"/"+FilePath+musicFormat);
+        }
     }
 
     public void run() {
@@ -388,7 +418,6 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
             switch (which){
                 case -1:
                     if(!dialogView.getFileName().equals("")) {
-                        Log.d(TAG, "파일 저장 이름은 " + dialogView.getFileName());
                         fileSave(dialogView.getFileName());
                         Toast.makeText(getApplicationContext(), "저장 되었습니다.", Toast.LENGTH_SHORT).show();
 
@@ -400,7 +429,6 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
                                 parent.removeView(dialogView);
                             }
                         }
-
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "파일 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
@@ -414,7 +442,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
                         }
                     }
                     break;
-                case -2:
+                case -2:  // 취소버튼이 눌렸을 때
                     if (dialogView != null)
                     {
                         ViewGroup parent = (ViewGroup) dialogView.getParent();
@@ -433,7 +461,6 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         aBuilder.setView(dialogView.getDialogView());
         aBuilder.setPositiveButton("저장", alertDialogClickListener);
         aBuilder.setNegativeButton("취소", alertDialogClickListener);
-
     }
 
 
