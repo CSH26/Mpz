@@ -2,7 +2,6 @@ package com.example.tj.mpz.Music;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -45,7 +44,7 @@ public class MusicListAdapter extends BaseAdapter {
 
     }
 
-    // 벨소리 등 의 문자열 제거 메소드
+    // 벨소리 등 의 문자 제거 메소드
     public String subString(String title){
         String returnString = "";
         if(title.contains("벨소리")){

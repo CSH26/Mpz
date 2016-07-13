@@ -100,7 +100,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         long musicPosition = musicBundle.getLong("MUSIC_POSITION");
         selection = MediaStore.Audio.Media._ID+" = \'"+Long.toString(musicPosition)+"\'";   // 클릭된 id에 해당하는 결과만 가져오기 위해 selection 추가
         cursor = contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null, selection, null, null);
-        initFileSetting();
+        initFileSetting(musicBundle.getString("MUSIC_TITLE"));
         initRecordButton();
         setListener();
 
@@ -158,12 +158,12 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         mr_StopButton.setOnClickListener(this);
     }
 
-    public void initFileSetting(){
+    public void initFileSetting(String title){
         cursor.moveToFirst();
         int fileColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
         audiofilepath = cursor.getString(fileColumn); // 결과로 얻어온 파일의 경로를 얻어옴
         durationSeek.setProgress(0);
-        dataTitle.setText(cursor.getString(8));
+        dataTitle.setText(title);
         try{
             mediaPlayer.setDataSource(audiofilepath);
             mediaPlayer.prepare();
@@ -373,6 +373,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
     public void recordStop(){
         if (isRecording) {
             if (mediaPlayer.isPlaying()) {
+                at_a_time_Button.setImageResource(R.drawable.at_a_time_image);
                 mrSetZeroPosition();
             }
             isRecording = false;
@@ -415,6 +416,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         mediaPlayer.seekTo(0);
         durationSeek.setProgress(0);
         startDurationText.setText("00:00");
+        at_a_time_Button.setImageResource(R.drawable.at_a_time_image);
     }
 
     @Override
@@ -491,6 +493,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
                 mediaPlayer.seekTo(0);
                 durationSeek.setProgress(0);
                 startDurationText.setText("00:00");
+                at_a_time_Button.setImageResource(R.drawable.at_a_time_image);
             }
         }
 

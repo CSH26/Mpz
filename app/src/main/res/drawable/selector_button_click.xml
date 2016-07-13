@@ -10,9 +10,8 @@
      <!-- Customize your theme here.
         android:state_enabled = 현재 사용 가능 상태일 경우 (유무)
         android:state_selected = 현재 선택된 경우 (유무)
-        android:state_pressed = 현재 클릭이 된 경우 (유무)
+        android:state_pressed = 현재 버튼이 눌렸다/띠어진 된 경우 (유무)
         android:state_focused = 현재 포커스를 가진 경우 (유무)
-        android:state_selected = 현재 선택된 경우 (유무)
         android:state_checked = 현재 체크된 경우 (유무)
      -->
 </selector>

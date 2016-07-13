@@ -15,7 +15,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import com.example.tj.mpz.R;
 
-public class RecordCheckActivity extends AppCompatActivity implements View.OnClickListener, Runnable, MediaPlayer.OnCompletionListener {
+public class
+RecordCheckActivity extends AppCompatActivity implements View.OnClickListener, Runnable, MediaPlayer.OnCompletionListener {
 
     private final String TAG = "RecordCheckActivity";
     MediaPlayer mediaPlayer;
@@ -90,7 +91,6 @@ public class RecordCheckActivity extends AppCompatActivity implements View.OnCli
                     else if(runSecond < 60)
                         startDurationText.setText(runMinute+":"+runSecond);
                 }
-
             }
         };
     }
@@ -139,13 +139,11 @@ public class RecordCheckActivity extends AppCompatActivity implements View.OnCli
 
             }
         }
-
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
             volumeImage.setImageResource(R.drawable.volume_control);
             isQuite = false;
         }
-
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             if(seekBar.getContentDescription().equals("V")){

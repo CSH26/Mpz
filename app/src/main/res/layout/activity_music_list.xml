@@ -18,7 +18,12 @@
         android:layout_height="wrap_content">
 
             <ListView
-                android:listSelector="#B2EBF4"
+                android:fastScrollEnabled="true"
+                android:scrollbarStyle="insideOverlay"
+                android:divider="@color/colorAccent"
+                android:headerDividersEnabled="false"
+                android:dividerHeight="2dp"
+                android:listSelector="@color/list_item_color"
                 android:id="@+id/musicList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

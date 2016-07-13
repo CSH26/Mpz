@@ -9,5 +9,8 @@
     <color name="color_3aedf4">#3aedf4</color>
     <color name="color_92f3fd">#92f3fd</color>
     <color name="alert_button_color">#41AF39</color>
+    <color name="list_item_color">#B2EBF4</color>
+    <color name="list_header_fontcolor">#E889BC</color>
+    <color name="list_header_back">#DDDDFF</color>
 
 </resources>
