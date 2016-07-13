@@ -29,10 +29,10 @@ public class PlayListView extends LinearLayout {
 
         musicTitle = (TextView)findViewById(R.id.musicTitle);
         musicTitle.setText(mItem.getData(0));
-        musicArtist = (TextView)findViewById(R.id.musicAlbumTitle);
-        musicArtist.setText(mItem.getData(1));
-        musicAlbumTitle = (TextView)findViewById(R.id.musicArtist);
-        musicAlbumTitle.setText(mItem.getData(2));
+        musicAlbumTitle = (TextView)findViewById(R.id.musicAlbumTitle);
+        musicAlbumTitle.setText(mItem.getData(1));
+        musicArtist = (TextView)findViewById(R.id.musicArtist);
+        musicArtist.setText(mItem.getData(2));
     }
 
     public void setText(int index, String data){
@@ -40,15 +40,14 @@ public class PlayListView extends LinearLayout {
             musicTitle.setText(data);
         }
         else if(index==1){
-            musicArtist.setText(data);
+            musicAlbumTitle.setText(data);
         }
         else if(index==2){
-            musicAlbumTitle.setText(data);
+            musicArtist.setText(data);
         }
         else
         {
             throw new IllegalArgumentException();
-
         }
     }
 

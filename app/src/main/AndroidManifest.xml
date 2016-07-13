@@ -14,18 +14,18 @@
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".Music.MusicListActivity">
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".SplashActivity"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"></activity>
 
-        <activity android:name=".Music.MusicDataActivity"
-            >
+        <activity android:name=".Music.MusicDataActivity">
         </activity>
         <activity android:name=".Music.RecordCheckActivity"></activity>
     </application>

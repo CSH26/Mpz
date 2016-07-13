@@ -1,5 +1,6 @@
 package com.example.tj.mpz.Music;
 
+// 음원파일의 duration을 밀리세컨드로 받아들여 분과 초로 계산하는 클래스
 public class DurationCalc {
     long duration;
     String sSecond;

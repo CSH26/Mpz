@@ -1,45 +1,28 @@
 package com.example.tj.mpz.Music;
 
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.MediaRecorder;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.example.tj.mpz.R;
 
 public class RecordCheckActivity extends AppCompatActivity implements View.OnClickListener, Runnable, MediaPlayer.OnCompletionListener {
 
     private final String TAG = "RecordCheckActivity";
     MediaPlayer mediaPlayer;
-
-    AlertDialogClickListener alertDialogClickListener;
-    AlertDialog.Builder aBuilder;
-    DialogView dialogView;
     SeekBar volumeSeek, durationSeek;
-    TextView volumeInfo, startDurationText, endDurationText;
+    TextView volumeInfo, startDurationText, endDurationText, dataTitle;
     AudioManager audioManager;
     ImageView volumeImage, playImage, mr_RewindButton, mr_FastForwordButton, mr_StopButton;
-    ImageButton saveButton;
     boolean isQuite = false;
     int pastVolume = 0, maxSecond, runSecond = 0, runMinute = 0;
 
@@ -54,13 +37,9 @@ public class RecordCheckActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_check);
 
-        alertDialogClickListener = new AlertDialogClickListener();
-        aBuilder = new AlertDialog.Builder(this);
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(this);
 
-        saveButton = (ImageButton)findViewById(R.id.saveButton);
-        dialogView = new DialogView(this);
         savedFilePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/myRecord.3gp";
         mr_FastForwordButton = (ImageView)findViewById(R.id.mr_fast_forword_button);
         mr_RewindButton = (ImageView)findViewById(R.id.mr_rewind_button);
@@ -71,6 +50,7 @@ public class RecordCheckActivity extends AppCompatActivity implements View.OnCli
         volumeInfo = (TextView)findViewById(R.id.volumeInfo);
         startDurationText = (TextView)findViewById(R.id.startDurationText);
         endDurationText = (TextView)findViewById(R.id.endDurationText);
+        dataTitle = (TextView)findViewById(R.id.dataTitle);
 
         SeekBarOnChangeListener seekBarOnChangeListener = new SeekBarOnChangeListener();
         volumeSeek = (SeekBar)findViewById(R.id.volumeSeek);
@@ -82,12 +62,12 @@ public class RecordCheckActivity extends AppCompatActivity implements View.OnCli
         durationSeek.setContentDescription("D");
         volumeSeek.setOnSeekBarChangeListener(seekBarOnChangeListener);
         durationSeek.setOnSeekBarChangeListener(seekBarOnChangeListener);
-        createAlertDialog();
 
         Intent intent = getIntent();
         Bundle recordBundle = intent.getExtras();
         String record_file_path = recordBundle.getString("RECORD_FILE_PATH");
-        initFileSetting(record_file_path);
+        String recordTitle = recordBundle.getString("TITLE");
+        initFileSetting(record_file_path, recordTitle);
         setListener();
 
         try{
@@ -115,22 +95,18 @@ public class RecordCheckActivity extends AppCompatActivity implements View.OnCli
         };
     }
 
-    public void fileSave(String FilePath){
-
-    }
-
     public void setListener(){
-        saveButton.setOnClickListener(this);
         playImage.setOnClickListener(this);
         mr_FastForwordButton.setOnClickListener(this);
         mr_RewindButton.setOnClickListener(this);
         mr_StopButton.setOnClickListener(this);
     }
 
-    public void initFileSetting(String path){
+    public void initFileSetting(String path, String title){
 
         audiofilepath = path;
         durationSeek.setProgress(0);
+        dataTitle.setText(title);
         try{
             mediaPlayer.setDataSource(audiofilepath);
             mediaPlayer.prepare();
@@ -227,10 +203,6 @@ public class RecordCheckActivity extends AppCompatActivity implements View.OnCli
             case R.id.mr_stop_button:
                 mrSetZeroPosition();
                 break;
-            case R.id.saveButton:
-                aBuilder = new AlertDialog.Builder(this);
-                aBuilder.show();
-                break;
         }
     }
 
@@ -302,63 +274,9 @@ public class RecordCheckActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void finish() {
         super.finish();
-        mediaPlayer.stop();
-    }
-
-    private class AlertDialogClickListener implements DialogInterface.OnClickListener{
-
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-
-            switch (which){
-                case -1:
-                    if(!dialogView.getFileName().equals("")) {
-                        Log.d(TAG, "파일 저장 이름은 " + dialogView.getFileName());
-                        fileSave(dialogView.getFileName());
-                        Toast.makeText(getApplicationContext(), "저장 되었습니다.", Toast.LENGTH_SHORT).show();
-
-                        if (dialogView != null)
-                        {
-                            ViewGroup parent = (ViewGroup) dialogView.getParent();
-                            if (parent != null)
-                            {
-                                parent.removeView(dialogView);
-                            }
-                        }
-
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), "파일 이름을 입력하세요.", Toast.LENGTH_SHORT).show();
-                        if (dialogView != null)
-                        {
-                            ViewGroup parent = (ViewGroup) dialogView.getParent();
-                            if (parent != null)
-                            {
-                                parent.removeView(dialogView);
-                            }
-                        }
-                    }
-                    break;
-                case -2:
-                    if (dialogView != null)
-                    {
-                        ViewGroup parent = (ViewGroup) dialogView.getParent();
-                        if (parent != null)
-                        {
-                            parent.removeView(dialogView);
-                        }
-                    }
-                    break;
-            }
-        }
-    }
-
-    public void createAlertDialog(){
-        aBuilder.setTitle("Save Box");
-        aBuilder.setView(dialogView.getDialogView());
-        aBuilder.setPositiveButton("저장", alertDialogClickListener);
-        aBuilder.setNegativeButton("취소", alertDialogClickListener);
-
+        setResult(RESULT_OK);
+        if(mediaPlayer.isPlaying())
+            mediaPlayer.stop();
     }
 
 }

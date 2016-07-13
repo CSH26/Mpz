@@ -1,43 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/splash_back"
     android:id="@+id/splashLayout"
-
-
+    android:orientation="vertical"
     tools:context="com.example.tj.mpz.SplashActivity">
 
+    <LinearLayout
+        android:layout_weight="2"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/logo_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logoText" />
+    </LinearLayout>
 
-    <ImageView
-       android:layout_marginTop="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerInParent="true"
-        android:src="@drawable/logo_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/logoText" />
+    <LinearLayout
+        android:layout_weight="3"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:src="@drawable/mpz_logo"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:id="@+id/logo"
+             />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ProgressBar
+            android:id="@+id/ProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progress="100"
+            />
+    </LinearLayout>
 
 
-    <ImageView
-        android:layout_below="@id/logoText"
-        android:src="@drawable/mpz_logo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:id="@+id/logo"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="70dp"
-         />
-
-    <ProgressBar android:id="@+id/ProgressBar"
-        android:layout_below="@id/logo"
-
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_centerInParent="true"
-        android:progress="100"
-        android:layout_marginTop="100dp" />
-
-
-</RelativeLayout>
+</LinearLayout>
