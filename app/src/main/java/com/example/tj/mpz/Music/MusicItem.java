@@ -14,31 +14,6 @@ public class MusicItem {
         mItem = mInfo;
     }
 
-    public MusicItem(Drawable icon, String musicTitle){
-        mIcon = icon;
-
-        mItem = new String[1];
-        mItem[0] = musicTitle;
-
-    }
-
-    public MusicItem(Drawable icon, String musicTitle, String musicArtist){
-        mIcon = icon;
-
-        mItem = new String[2];
-        mItem[0] = musicTitle;
-        mItem[1] = musicArtist;
-    }
-
-    public MusicItem(Drawable icon, String musicTitle, String musicArtist, String musicAlbumTitle){
-        mIcon = icon;
-
-        mItem = new String[3];
-        mItem[0] = musicTitle;
-        mItem[1] = musicArtist;
-        mItem[2] = musicAlbumTitle;
-    }
-
     public MusicItem(long id, String musicTitle, String musicAlbumTitle, String musicArtist){
         mItem = new String[3];
         this.id = id;

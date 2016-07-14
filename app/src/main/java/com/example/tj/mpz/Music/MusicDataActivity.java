@@ -109,7 +109,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         } else {
             baseFilePath = Environment.MEDIA_UNMOUNTED;
         }
-
+        createAlertDialog();
         try{
             new Thread(MusicDataActivity.this).start();
         }catch (Exception e){
@@ -478,6 +478,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
     // Dialog 박스 셋팅
     public void createAlertDialog(){
         aBuilder.setTitle("Save Box");
+        dialogView.setMrInfo(dataTitle.getText().toString());
         aBuilder.setView(dialogView.getDialogView());
         aBuilder.setPositiveButton("저장", alertDialogClickListener);
         aBuilder.setNegativeButton("취소", alertDialogClickListener);
