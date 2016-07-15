@@ -90,6 +90,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         volumeInfo = (TextView)findViewById(R.id.volumeInfo);
 
         initVolumeSeekBar();
+        // 시크바 리스너에서 볼륨 시크와 듀레이션 시크바를 구별할 디스크립션 설정
         volumeSeek.setContentDescription("V");
         durationSeek.setContentDescription("D");
         volumeSeek.setOnSeekBarChangeListener(seekBarOnChangeListener);
