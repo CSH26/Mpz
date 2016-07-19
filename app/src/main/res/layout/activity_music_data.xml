@@ -108,7 +108,7 @@
                 android:layout_marginRight="20dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/rewind_button"
+                android:src="@drawable/selector_rewind_button_click"
                 android:id="@+id/mr_rewind_button" />
 
             <ImageView
@@ -116,7 +116,7 @@
                 android:layout_marginRight="20dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/forword_button"
+                android:src="@drawable/selector_forward_button_click"
                 android:id="@+id/mr_fast_forword_button" />
 
             <ImageView
@@ -124,7 +124,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:src="@drawable/stop_button"
+                android:src="@drawable/selector_mr_stop_button_click"
                 android:id="@+id/mr_stop_button" />
 
             <TextView

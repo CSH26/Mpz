@@ -58,6 +58,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_music_data);
 
+        Toast.makeText(getApplicationContext(),"파일 이름은 파일명_Recorded로 저장 됩니다.",Toast.LENGTH_SHORT).show();
         fileAccess = Environment.getExternalStorageState(); // sd카드에 접근 가능한지 체크하는 변수
         aBuilder = new AlertDialog.Builder(MusicDataActivity.this); // save 작동시에 띄워줄 dialog창
         alertDialogClickListener = new AlertDialogClickListener();
@@ -65,7 +66,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setOnCompletionListener(this);
         contentResolver = getContentResolver();
-        savedFilePath = Environment.getExternalStorageDirectory().getAbsolutePath()+"/myRecord.3gp"; // myRecord라는 이름으로 녹음파일 저장
+        savedFilePath = Environment.getExternalStorageDirectory().getAbsolutePath(); // myRecord라는 이름으로 녹음파일 저장
         musicFormat = ".3gp";
         at_a_time_Button = (ImageButton)findViewById(R.id.at_a_time_Button);  // 동시 작동 버튼
         mr_FastForwordButton = (ImageView)findViewById(R.id.mr_fast_forword_button); // 빨리 감기 버튼
@@ -160,6 +161,7 @@ public class MusicDataActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void initFileSetting(String title){
+        savedFilePath += "/"+title+"_Recorded.3gp";
         cursor.moveToFirst();
         int fileColumn = cursor.getColumnIndex(MediaStore.Audio.Media.DATA);
         audiofilepath = cursor.getString(fileColumn); // 결과로 얻어온 파일의 경로를 얻어옴
